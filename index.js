@@ -14,17 +14,46 @@ function setQuery(evt) {
 
 function getResult(data) {
     fetch(`${api.base}weather?q=${data}&units=metric&appid=${api.key}`).then(weather => {
-        return weather.json()
+        if (weather.ok)
+            return weather.json()
+        throw new Error('Something went wrong');
+
     }).then(response => {
+        console.log(response)
         displayWeather(response)
-    })
-    console.log(data);
+    }).catch((error) => {
+        hideComponent();
+        console.log(error)
+    });
 }
 
+function hideComponent() {
+    var element = document.getElementById("main-div");
+    element.style.display = "none"
+
+    var apiError = document.getElementById("api-error");
+    apiError.style.display = "block"
+
+}
+
+document.getElementById("button").onclick = function () {
+    showMainView();
+}
+function showMainView() {
+    var element = document.getElementById("main-div");
+    element.style.display = "block"
+
+    var apiError = document.getElementById("api-error");
+    apiError.style.display = "none"
+
+    document.getElementById("searchBox").value = "";
+}
 function displayWeather(weatherInfo) {
+    showMainView()
+
     console.log(weatherInfo)
     let city = document.querySelector('.location .city');
-    city.innerText = `${weatherInfo.name} ${weatherInfo.sys.country}`;
+    city.innerText = `${weatherInfo.name}, ${weatherInfo.sys.country}`;
 
     let temp = document.querySelector('.current .temp');
     temp.innerHTML = `${Math.round(weatherInfo.main.temp)} <span>&#8451;</span>`;
@@ -32,7 +61,7 @@ function displayWeather(weatherInfo) {
     weather.innerHTML = `${weatherInfo.weather[0].main}`;
 
     let hilow = document.querySelector('.current .hi-low');
-    hilow.innerHTML = `${Math.round(weatherInfo.main.temp_min)} <span>&#8451;</span> ${Math.round(weatherInfo.main.temp_max)} <span>&#8451;</span>`;
+    hilow.innerHTML = `${Math.round(weatherInfo.main.temp_min)} <span>&#8451;</span> / ${Math.round(weatherInfo.main.temp_max)} <span>&#8451;</span>`;
 
     let dateQuery = document.querySelector('.location .date');
     const date = new Date();

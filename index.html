@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <div class="app-wrap">
+    <div class="app-wrap" id="main-div">
         <header>
-            <input type="text" class="search-box" placeholder="Enter the city">
+            <input type="text" class="search-box" id="searchBox" placeholder="Enter the city">
         </header>
         <main>
             <section class="location">
@@ -26,6 +26,13 @@
             </div>
         </main>
 
+    </div>
+
+    <div id="api-error">
+        <main>
+            <button class="button" id="button">Retry </button>
+
+        </main>
     </div>
     <script src="index.js"></script>
 </body>
